@@ -6,7 +6,7 @@ set :port, port
 
 # Allow requests from any host in the development environment
 configure :development do 
- set :host_authenticaiton, { permitted_hosts: [] }
+  set :host_authorization, { permitted_hosts: [] }
 end
 
 get "/" do
