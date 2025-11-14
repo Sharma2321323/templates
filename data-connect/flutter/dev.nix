@@ -3,7 +3,7 @@
 { pkgs, ... }: {
 
   # Which nixpkgs channel to use.
-  channel = "stable-24.05"; # or "unstable"
+  channel = "stable-25.05"; # or "unstable"
 
   services.postgres = {
     extensions = ["pgvector"];
@@ -13,7 +13,7 @@
   
   # Use https://search.nixos.org/packages to find packages
   packages = [
-    pkgs.nodejs_20
+    pkgs.nodejs_24
     (pkgs.postgresql_15.withPackages (p: [ p.pgvector ]))
     pkgs.nodePackages.pnpm
     pkgs.jdk17
