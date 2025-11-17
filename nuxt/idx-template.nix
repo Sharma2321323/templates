@@ -16,7 +16,7 @@
       npx nuxi@latest -y init "$out" \
         --package-manager ${packageManager} \
         --no-install \
-        --git-init
+        --git-init  <<< "No"
 
       mkdir "$out"/.idx
       cp ${./dev.nix} "$out"/.idx/dev.nix
@@ -31,6 +31,10 @@
           "${packageManager} install"        
       }/g" "$out"/.idx/dev.nix
 
+      sed -i "s/PM_INSTALL/${
+            "${packageManager} install"        
+      }/g" "$out"/.idx/dev.nix
+      
       sed -i "s/PM_NIX_PACKAGE/${
         if packageManager == "npm" then
           ""
