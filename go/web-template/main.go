@@ -21,10 +21,10 @@ import (
 var (
 	httpAddr   = flag.String("addr", "0.0.0.0:8080", "Listen address")
 	pollPeriod = flag.Duration("poll", 5*time.Second, "Poll period")
-	version    = flag.String("version", "1.20", "Go version")
+	version    = flag.String("version", "1.24", "Go version")
 )
 
-const baseChangeURL = "https://go.googlesource.com/go/+/"
+const baseChangeURL = "https://go.googlesource.com/go/+/refs/heads/release-branch."
 
 func main() {
 	flag.Parse()
