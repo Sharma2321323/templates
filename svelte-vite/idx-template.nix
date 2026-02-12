@@ -13,7 +13,7 @@
   packages = [ pkgs.nodejs_20 pkgs.typescript ];
 
   # Scripts to run when a new project is created
-  bootstrap = '''
+  bootstrap = ''
     set -x
     echo "--- Starting bootstrap process with Node.js 20 and Vite 5 ---"
 
@@ -49,7 +49,7 @@
 
     echo "--- Bootstrap process finished ---"
     set +x
-  ''';
+  '';
 
   # Visible files and folders
   visible = [
