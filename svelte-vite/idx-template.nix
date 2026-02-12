@@ -13,7 +13,7 @@
   packages = [ pkgs.nodejs_20 pkgs.typescript ];
 
   # Scripts to run when a new project is created
-  bootstrap = ''
+  bootstrap = '''
     set -x
     echo "--- Starting bootstrap process with Node.js 20 and Vite 5 ---"
 
@@ -49,18 +49,18 @@
 
     echo "--- Bootstrap process finished ---"
     set +x
-  '';
+  ''';
 
   # Visible files and folders
   visible = [
-    ".idx",
-    "src",
-    "package.json",
-    "svelte.config.js",
-    "vite.config.js",
-    "README.md",
-    "eslint.config.js",
-    "tsconfig.json",
+    ".idx"
+    "src"
+    "package.json"
+    "svelte.config.js"
+    "vite.config.js"
+    "README.md"
+    "eslint.config.js"
+    "tsconfig.json"
     "tsconfig.node.json"
   ];
 }
