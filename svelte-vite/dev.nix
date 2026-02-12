@@ -14,14 +14,13 @@
   idx = {
     # Search for the extensions you want on https://open-vsx.org/ and use "publisher.id"
     extensions = [
-      "svelte.svelte-vscode"
-      "dbaeumer.vscode-eslint"
+      "svelte.svelte-vscode",
+      "dbaeumer.vscode-eslint",
       "esbenp.prettier-vscode"
     ];
     workspace = {
       # Runs when a workspace is first created with this `dev.nix` file
       onCreate = {
-        update-pkg = "node .idx/update-pkg.js";
         npm-install = "npm ci --no-audit --prefer-offline --no-progress --timing";
         # Open editors for the following files by default, if they exist:
         default.openFiles = [ "src/App.svelte" ];
