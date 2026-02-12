@@ -14,8 +14,8 @@
   idx = {
     # Search for the extensions you want on https://open-vsx.org/ and use "publisher.id"
     extensions = [
-      "svelte.svelte-vscode",
-      "dbaeumer.vscode-eslint",
+      "svelte.svelte-vscode"
+      "dbaeumer.vscode-eslint"
       "esbenp.prettier-vscode"
     ];
     workspace = {
