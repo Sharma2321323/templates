@@ -1,22 +1,43 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'node:fs';
+import path from 'node:path';
 
 // --- Configuration ---
 const packageJsonPath = path.join(process.cwd(), 'package.json');
 
 const scriptsToAdd = {
   lint: 'eslint .',
-  format: 'prettier --write .',
+  format: 'prettier . --write',
 };
 
 const devDependenciesToAdd = {
-  '@eslint/js': 'latest',
-  eslint: 'latest',
-  'eslint-config-prettier': 'latest',
-  'eslint-plugin-svelte': 'latest',
-  globals: 'latest',
-  prettier: 'latest',
-  'typescript-eslint': 'latest',
+  '@typescript-eslint/eslint-plugin': '^6.19.0',
+  '@typescript-eslint/parser': '^6.19.0',
+  eslint: '^8.56.0',
+  'eslint-config-prettier': '^9.1.0',
+  'eslint-plugin-svelte': '^2.35.1',
+  globals: '^15.4.0',
+  prettier: '^3.1.1',
+  'prettier-plugin-svelte': '^3.1.2',
+  typescript: '^5.3.3',
+};
+
+const prettierConfig = {
+  plugins: ['prettier-plugin-svelte'],
+  arrowParens: 'always',
+  bracketSpacing: true,
+  htmlWhitespaceSensitivity: 'css',
+  insertPragma: false,
+  bracketSameLine: false,
+  jsxSingleQuote: false,
+  printWidth: 80,
+  proseWrap: 'preserve',
+  quoteProps: 'as-needed',
+  requirePragma: false,
+  semi: true,
+  singleQuote: true,
+  tabWidth: 2,
+  trailingComma: 'all',
+  useTabs: false,
 };
 
 // --- Script Logic ---
@@ -29,11 +50,12 @@ try {
     ...packageJson.devDependencies,
     ...devDependenciesToAdd,
   };
+  packageJson.prettier = prettierConfig;
 
   const updatedPackageJsonContent = JSON.stringify(packageJson, null, 2);
   fs.writeFileSync(packageJsonPath, updatedPackageJsonContent);
 
-  console.log('Successfully updated package.json for Svelte with ESLint and Prettier!');
+  console.log('Successfully updated package.json with modern ESLint and Prettier configs for Svelte!');
 } catch (error) {
   console.error('Error updating package.json:', error);
   process.exit(1);
