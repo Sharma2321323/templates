@@ -1,66 +1,45 @@
-{
-  pkgs, ...
-}:
-{
-  # Template metadata
-  name = "Svelte + Vite";
-  description = "A simple Svelte starter template with Vite";
-
-  # Use the stable channel
-  channel = "stable-24.05";
-
-  # Use a stable LTS Node.js version and add typescript for LSP support in the IDE
-  packages = [ pkgs.nodejs_20 pkgs.typescript ];
-
-  # Scripts to run when a new project is created
-  bootstrap = ''
-    set -x
-    echo "--- Starting bootstrap process with Node.js 20 and Vite 5 ---"
-
-    # Create a new Svelte + Vite project using the TypeScript template
-    yes | npm create vite@5 . -- --template svelte-ts
-    echo "--- Vite project created with svelte-ts template ---"
-
-    # Install initial dependencies from package.json
-    npm install
-    echo "--- Initial dependencies installed ---"
-
-    # Install ESLint, Prettier, and TypeScript dev dependencies
-    npm install @eslint/js@^9.0.0 eslint@^9.0.0 eslint-config-prettier@^9.0.0 eslint-plugin-svelte@^2.36.0 globals@^15.0.0 prettier@^3.1.0 typescript-eslint@^7.11.0 --save-dev
-    echo "--- Dev dependencies installed ---"
-
-    # Add lint and format scripts to package.json
-    npm pkg set scripts.lint="eslint ."
-    npm pkg set scripts.format="prettier --write ."
-    echo "--- Scripts added to package.json ---"
-
-    # Create the .idx directory for IDE-specific files
-    mkdir -p .idx
-    echo "--- .idx directory created ---"
-
-    # Copy the template's .idx content into the new project's .idx directory
-    cp ${./.idx/eslint.config.js} .idx/
-    cp ${./.idx/airules.md} .idx/
-    echo "--- .idx files copied ---"
-
-    # Copy the eslint config to the project root
-    cp .idx/eslint.config.js .
-    echo "--- ESLint config copied to project root ---"
-
-    echo "--- Bootstrap process finished ---"
-    set +x
-  '';
-
-  # Visible files and folders
-  visible = [
-    ".idx"
-    "src"
-    "package.json"
-    "svelte.config.js"
-    "vite.config.js"
-    "README.md"
-    "eslint.config.js"
-    "tsconfig.json"
-    "tsconfig.node.json"
+{ pkgs, language ? "js", ... }: {
+  packages = [
+    pkgs.nodejs_20
   ];
+  bootstrap = ''
+    # Create the Vite project.
+    npm create -y vite@latest "$WS_NAME" -- --template ${if language == "ts" then "svelte-ts" else "svelte"}
+
+    # Enter the newly created project directory.
+    cd "$WS_NAME"
+
+    # Create the .idx directory and copy the Nix environment file.
+    mkdir -p ./.idx
+    cp -f ${./dev.nix} ./.idx/dev.nix
+    cp -f ${./icon.png} ./.idx/icon.png
+
+    # Remove the default ESLint config from Vite, if it exists.
+    rm -f ./.eslintrc.cjs
+
+    # Copy our modern ESLint config from the template root.
+    cp -f ${./.idx/eslint.config.js} ./eslint.config.js
+
+    # Copy and run the script to update package.json with new dependencies and scripts.
+    cp -f ${./.idx/update-pkg.js} ./update-pkg.js
+    ${pkgs.nodejs_20}/bin/node ./update-pkg.js
+    rm ./update-pkg.js # Clean up the script.
+
+    # Install all dependencies.
+    ${pkgs.nodejs_20}/bin/npm install
+
+    # Go back to the parent directory.
+    cd ..
+
+    # Move the completed project to the $out directory, which is what Nix expects.
+    mv "$WS_NAME" "$out"
+
+    mkdir -p "$out/.idx"
+    chmod -R u+w "$out"
+    cp -rf ${./.idx/airules.md} "$out/.idx/airules.md"
+    cp -rf "$out/.idx/airules.md" "$out/GEMINI.md"
+    chmod -R u+w "$out"
+    
+    cd "$out"; npm install --package-lock-only --ignore-scripts
+  '';
 }
