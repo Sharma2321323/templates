@@ -1,39 +1,36 @@
-
-import tseslint from 'typescript-eslint';
-import pluginSvelte from 'eslint-plugin-svelte';
-import prettier from 'eslint-config-prettier';
-import globals from 'globals';
+import globals from "globals";
+import js from "@eslint/js";
+import tseslint from "typescript-eslint";
+import svelte from "eslint-plugin-svelte";
+import prettier from "eslint-config-prettier";
 
 export default [
   // 1. Global ignores
   {
-    ignores: ["dist", "node_modules", "*.cjs", "**/*.config.js"],
+    ignores: ["build/", ".svelte-kit/", "dist/"],
   },
-
-  // 2. Recommended rules
+  // 2. Main configuration for JS/TS files
+  js.configs.recommended,
   ...tseslint.configs.recommended,
-  ...pluginSvelte.configs['flat/recommended'],
-
-  // 3. Svelte configuration
   {
-    files: ["**/*.svelte"],
     languageOptions: {
-      ecmaVersion: 2021,
-      sourceType: "module",
       globals: {
         ...globals.browser,
-      },
-      parserOptions: {
-        parser: tseslint.parser,
-        extraFileExtensions: [".svelte"],
-      },
-    },
-    rules: {
-      // override/add rules settings here, such as:
-      // 'svelte/rule-name': 'error'
-    },
+        ...globals.node,
+      }
+    }
   },
-
-  // 4. Prettier config must be last to override other formatting rules.
+  // 3. Svelte configuration
+  {
+    files: ["src/**/*.svelte"],
+    ...svelte.configs["flat/recommended"],
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+      }
+    }
+  },
+  // 4. Prettier config
   prettier,
+  ...svelte.configs["flat/prettier"]
 ];
