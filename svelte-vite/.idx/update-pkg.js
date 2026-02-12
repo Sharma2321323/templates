@@ -10,15 +10,14 @@ const scriptsToAdd = {
 };
 
 const devDependenciesToAdd = {
-  '@typescript-eslint/eslint-plugin': '^6.19.0',
-  '@typescript-eslint/parser': '^6.19.0',
-  eslint: '^8.56.0',
+  'eslint': '^9.5.0',
   'eslint-config-prettier': '^9.1.0',
   'eslint-plugin-svelte': '^2.35.1',
-  globals: '^15.4.0',
-  prettier: '^3.1.1',
+  'globals': '^15.4.0',
+  'prettier': '^3.1.1',
   'prettier-plugin-svelte': '^3.1.2',
-  typescript: '^5.3.3',
+  'typescript': '^5.3.3',
+  'typescript-eslint': 'latest'
 };
 
 const prettierConfig = {
