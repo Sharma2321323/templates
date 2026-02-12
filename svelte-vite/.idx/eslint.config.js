@@ -21,16 +21,8 @@ export default [
     }
   },
   // 3. Svelte configuration
-  {
-    files: ["src/**/*.svelte"],
-    ...svelte.configs["flat/recommended"],
-    languageOptions: {
-      globals: {
-        ...globals.browser,
-      }
-    }
-  },
+  ...svelte.configs['flat/recommended'],
   // 4. Prettier config
   prettier,
-  ...svelte.configs["flat/prettier"]
+  ...svelte.configs['flat/prettier'],
 ];
