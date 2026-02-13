@@ -5,6 +5,14 @@ import svelte from "eslint-plugin-svelte";
 import prettier from "eslint-config-prettier";
 
 export default tseslint.config(
+  {
+    languageOptions: {
+        globals: {
+            ...globals.browser,
+            ...globals.node,
+        }
+    }
+  },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   ...svelte.configs['flat/recommended'],
@@ -13,9 +21,6 @@ export default tseslint.config(
   {
     files: ['**/*.svelte'],
     languageOptions: {
-      globals: {
-        ...globals.browser,
-      },
       parserOptions: {
         parser: tseslint.parser,
       },
