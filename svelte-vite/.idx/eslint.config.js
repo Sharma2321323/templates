@@ -4,25 +4,24 @@ import tseslint from "typescript-eslint";
 import svelte from "eslint-plugin-svelte";
 import prettier from "eslint-config-prettier";
 
-export default [
-  // 1. Global ignores
-  {
-    ignores: ["build/", ".svelte-kit/", "dist/"],
-  },
-  // 2. Main configuration for JS/TS files
+export default tseslint.config(
   js.configs.recommended,
   ...tseslint.configs.recommended,
+  ...svelte.configs['flat/recommended'],
+  prettier,
+  ...svelte.configs['flat/prettier'],
   {
+    files: ['**/*.svelte'],
     languageOptions: {
       globals: {
         ...globals.browser,
-        ...globals.node,
-      }
-    }
+      },
+      parserOptions: {
+        parser: tseslint.parser,
+      },
+    },
   },
-  // 3. Svelte configuration
-  ...svelte.configs['flat/recommended'],
-  // 4. Prettier config
-  prettier,
-  ...svelte.configs['flat/prettier'],
-];
+  {
+    ignores: ['build/', '.svelte-kit/', 'dist/'],
+  }
+);
