@@ -8,6 +8,9 @@
     chmod +w app/.idx/dev.nix
     mv app "$out"
 
+    echo '{}' > "$out/.prettierrc.json"
+    echo '{ "extends": ["eslint:recommended", "prettier"] }' > "$out/.eslintrc.json"
+
     mkdir -p "$out/.idx"
     chmod -R u+w "$out"
     cp -rf ${./.idx/airules.md} "$out/.idx/airules.md"
