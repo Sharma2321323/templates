@@ -11,13 +11,7 @@
     echo '{}' > "$out/.prettierrc.json"
     echo '{ "extends": ["eslint:recommended", "prettier"] }' > "$out/.eslintrc.json"
     
-    echo '{ \
-      "name": "rust-app", \
-      "scripts": { \
-        "lint": "eslint .", \
-        "format": "prettier --write ." \
-      } \
-    }' > "$out/package.json"
+    echo '{\"name\": \"rust-app\", \"scripts\": {\"lint\": \"eslint .\", \"format\": \"prettier --write .\"} }' > "$out/package.json"
 
     mkdir -p "$out/.idx"
     chmod -R u+w "$out"
