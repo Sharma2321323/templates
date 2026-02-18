@@ -9,6 +9,8 @@
     pkgs.rustc
     pkgs.rustfmt
     pkgs.stdenv.cc
+    pkgs.nodePackages.eslint
+    pkgs.nodePackages.prettier
   ];
   # Sets environment variables in the workspace
   env = {
@@ -21,6 +23,8 @@
       "tamasfe.even-better-toml"
       "serayuzgur.crates"
       "vadimcn.vscode-lldb"
+      "dbaeumer.vscode-eslint"
+      "esbenp.prettier-vscode"
     ];
     workspace = {
       onCreate = {
