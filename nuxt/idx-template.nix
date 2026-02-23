@@ -20,7 +20,8 @@
             "prettier"
           ]
         }' > .eslintrc.json && \
-        node -e '\n          const fs = require("fs");
+        node -e '
+          const fs = require("fs");
           const pkg = JSON.parse(fs.readFileSync("package.json", "utf-8"));
           pkg.scripts = {
             ...pkg.scripts,
@@ -46,10 +47,10 @@
       chmod -R u+w "$out"
 
       sed -i "s/PACKAGE_MANAGER/${packageManager}/g" "$out"/.idx/dev.nix
-      sed -i "s/PM_COMMAND/${\n        if packageManager == \"npm\" then\n          \"npm i --no-audit --prefer-offline --no-progress --timing\"\n        else\n          \"${packageManager} install\"\n      }/g" "$out"/.idx/dev.nix
-      sed -i "s/PM_INSTALL/${\n        \"${packageManager} install\"\n      }/g" "$out"/.idx/dev.nix
-      sed -i "s/PM_NIX_PACKAGE/${\n        if packageManager == \"npm\" then\n          \"\"\n        else if packageManager == \"pnpm\" then\n          \"pkgs.nodePackages.pnpm\"\n        else if packageManager == \"bun\" then\n          \"pkgs.bun\"\n        else\n          \"pkgs.yarn\"\n      }/g" "$out"/.idx/dev.nix
+      sed -i "s|PM_COMMAND|${if packageManager == "npm" then "npm i --no-audit --prefer-offline --no-progress --timing" else "${packageManager} install"}|g" "$out"/.idx/dev.nix
+      sed -i "s|PM_INSTALL|${packageManager} install|g" "$out"/.idx/dev.nix
+      sed -i 's|PM_NIX_PACKAGE|${if packageManager == "npm" then "" else if packageManager == "pnpm" then "pkgs.nodePackages.pnpm" else if packageManager == "bun" then "pkgs.bun" else "pkgs.yarn"}|g' "$out"/.idx/dev.nix
 
-      ${if packageManager == "npm" then "( cd \\$out && npm i --package-lock-only --ignore-scripts )" else ""}
+      ${if packageManager == "npm" then "( cd $out && npm i --package-lock-only --ignore-scripts )" else ""}
     '';
 }
