@@ -3,6 +3,8 @@
 # Accept additional arguments to this template corresponding to template
 # parameter IDs
 { pkgs, adk_agent_name ? "", region ? "us-central1", ... }: {
+  channel = "stable-25.05";
+  packages = [ pkgs.nodejs_20 ];
   # Shell script that produces the final environment
   bootstrap = ''
     # Copy the folder containing the `idx-template` files to the final
@@ -19,6 +21,53 @@
     REGION=${region}
     WS_NAME=$WS_NAME
     EOF
+
+    # cd into the output directory to run npm commands
+    cd "$out"
+
+    # Initialize a node project
+    npm init -y
+
+    # Install eslint and prettier
+    npm install eslint prettier --save-dev
+
+    # Create .eslintrc.json
+    echo '{
+      "root": true,
+      "extends": [
+        "eslint:recommended",
+        "prettier"
+      ],
+      "parserOptions": {
+        "ecmaVersion": "latest",
+        "sourceType": "module"
+      },
+      "env": {
+        "es6": true,
+        "node": true
+      }
+    }' > .eslintrc.json
+
+    # Create .prettierrc.json
+    echo '{
+      "semi": true,
+      "singleQuote": true,
+      "trailingComma": "es5"
+    }' > .prettierrc.json
+
+    # Add lint and format scripts to package.json
+    node -e '
+      const fs = require("fs");
+      const pkg = JSON.parse(fs.readFileSync("package.json", "utf-8"));
+      pkg.scripts = {
+        ...pkg.scripts,
+        "lint": "eslint .",
+        "format": "prettier --write ."
+      };
+      fs.writeFileSync("package.json", JSON.stringify(pkg, null, 2));
+    '
+    # cd back to the original directory
+    cd -
 
     # Remove the template files themselves and any connection to the template's
     # Git repository
