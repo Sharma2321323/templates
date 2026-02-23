@@ -1,4 +1,3 @@
-
 # To learn more about how to use Nix to configure your environment
 # see: https://firebase.google.com/docs/studio/customize-workspace
 { pkgs, ... }: {
@@ -11,12 +10,16 @@
     pkgs.gnumake
     pkgs.terraform
     pkgs.gh
+    pkgs.nodePackages.eslint
+    pkgs.nodePackages.prettier
   ];
   # Sets environment variables in the workspace
   env = {};
   idx = {
     # Search for the extensions you want on https://open-vsx.org/ and use "publisher.id"
     extensions = [
+      "dbaeumer.vscode-eslint"
+      "esbenp.prettier-vscode"
     ];
     workspace = {
       # Runs when a workspace is first created with this `dev.nix` file
