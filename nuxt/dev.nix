@@ -8,6 +8,8 @@
     pkgs.nodejs_24
     PM_NIX_PACKAGE
     pkgs.nodePackages.npm-check-updates
+    pkgs.nodePackages.eslint
+    pkgs.nodePackages.prettier
   ];
   # Sets environment variables in the workspace
   env = {};
@@ -15,6 +17,8 @@
     # Search for the extensions you want on https://open-vsx.org/ and use "publisher.id"
     extensions = [
       "vue.volar"
+      "dbaeumer.vscode-eslint"
+      "esbenp.prettier-vscode"
     ];
     workspace = {
       # Runs when a workspace is first created with this `dev.nix` file
