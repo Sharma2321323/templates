@@ -3,6 +3,9 @@
     packages = [
       pkgs.nodejs_20
       pkgs.git
+      pkgs.yarn
+      pkgs.nodePackages.pnpm
+      pkgs.bun
     ];
 
     bootstrap = ''
@@ -20,7 +23,7 @@
             "prettier"
           ]
         }' > .eslintrc.json && \
-        node -e '
+        node -e '\
           const fs = require("fs");
           const pkg = JSON.parse(fs.readFileSync("package.json", "utf-8"));
           pkg.scripts = {
@@ -33,10 +36,11 @@
             "eslint": "^8.57.0",
             "prettier": "^3.2.5",
             "@nuxtjs/eslint-config-typescript": "^12.1.0",
-            "eslint-config-prettier": "^9.1.0"
+            "eslint-config-prettier": "^9.1.0",
+            "typescript": "^5.4.5"
           };
           fs.writeFileSync("package.json", JSON.stringify(pkg, null, 2));
-        '
+        '\
       )
 
       mkdir -p "$out"/.idx
@@ -51,6 +55,6 @@
       sed -i "s|PM_INSTALL|${packageManager} install|g" "$out"/.idx/dev.nix
       sed -i 's|PM_NIX_PACKAGE|${if packageManager == "npm" then "" else if packageManager == "pnpm" then "pkgs.nodePackages.pnpm" else if packageManager == "bun" then "pkgs.bun" else "pkgs.yarn"}|g' "$out"/.idx/dev.nix
 
-      ${if packageManager == "npm" then "( cd $out && npm i --package-lock-only --ignore-scripts )" else ""}
+      ${if packageManager == "npm" then "( cd $out && npm i --package-lock-only --ignore-scripts )" else if packageManager == "pnpm" then "( cd $out && pnpm i --lockfile-only --ignore-scripts )" else ""}
     '';
 }
