@@ -23,7 +23,7 @@
             "prettier"
           ]
         }' > .eslintrc.json && \
-        node -e '\
+        node -e '
           const fs = require("fs");
           const pkg = JSON.parse(fs.readFileSync("package.json", "utf-8"));
           pkg.scripts = {
@@ -40,7 +40,7 @@
             "typescript": "^5.4.5"
           };
           fs.writeFileSync("package.json", JSON.stringify(pkg, null, 2));
-        '\
+        '
       )
 
       mkdir -p "$out"/.idx
