@@ -29,7 +29,7 @@
     npm init -y
 
     # Install eslint and prettier
-    npm install eslint prettier --save-dev
+    npm install eslint@^8.57.0 prettier --save-dev
 
     # Create .eslintrc.json
     echo '{
