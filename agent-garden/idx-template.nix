@@ -67,6 +67,7 @@
         "start": "node index.js",
         "dev": "nodemon index.js",
         "lint": "eslint .",
+        "eslint": "eslint .",
         "format": "prettier --write ."
       };
       fs.writeFileSync("package.json", JSON.stringify(pkg, null, 2));
