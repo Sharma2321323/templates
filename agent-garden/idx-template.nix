@@ -28,8 +28,11 @@
     # Initialize a node project
     npm init -y
 
-    # Install eslint and prettier
-    npm install eslint@^8.57.0 prettier --save-dev
+    # Install eslint, prettier, and nodemon
+    npm install eslint@^8.57.0 prettier eslint-config-prettier nodemon --save-dev
+
+    # Create a simple index.js file
+    echo 'console.log("Welcome to your new agent project! The \`dev\` script is running.");' > index.js
 
     # Create .eslintrc.json
     echo '{
@@ -55,12 +58,14 @@
       "trailingComma": "es5"
     }' > .prettierrc.json
 
-    # Add lint and format scripts to package.json
+    # Add scripts to package.json
     node -e '
       const fs = require("fs");
       const pkg = JSON.parse(fs.readFileSync("package.json", "utf-8"));
+      pkg.main = "index.js";
       pkg.scripts = {
-        ...pkg.scripts,
+        "start": "node index.js",
+        "dev": "nodemon index.js",
         "lint": "eslint .",
         "format": "prettier --write ."
       };
