@@ -1,13 +1,9 @@
-
-# No user-configurable parameters
-# Accept additional arguments to this template corresponding to template
-# parameter IDs
 { pkgs, adk_agent_name ? "", region ? "us-central1", ... }: {
   channel = "stable-25.05";
   packages = [ pkgs.nodejs_20 ];
   # Shell script that produces the final environment
   bootstrap = ''
-   # Copy the folder containing the \`idx-template\` files to the final
+   # Copy the folder containing the `idx-template` files to the final
    # project folder for the new workspace. ${./.} inserts the directory
    # of the checked-out Git folder containing this template.
    cp -rf ${./.} "$out"
@@ -25,40 +21,77 @@
    # cd into the output directory to run npm commands
    cd "$out"
 
-   # Initialize a node project
-   npm init -y
-
-   # Install eslint, prettier, and nodemon
-   npm install eslint@^8.57.0 prettier eslint-config-prettier nodemon --save-dev
-
-   # Create a simple index.js file
-   echo 'console.log("Welcome to your new agent project! The \\`dev\\` script is running.");' > index.js
-
-   # Create .eslintrc.json
-   echo '{\n     "root": true,\n     "extends": [\n       "eslint:recommended",\n       "prettier"\n     ],\n     "rules": {\n       "no-unused-vars": "off"\n     },\n     "parserOptions": {\n       "ecmaVersion": "latest",\n       "sourceType": "module"\n     },\n     "env": {\n       "browser": true,\n       "es6": true,\n       "node": true\n     }\n   }' > .eslintrc.json
-
-   # Create .prettierrc.json
-   echo '{\n     "semi": true,\n     "singleQuote": true,\n     "trailingComma": "es5"\n   }' > .prettierrc.json
-
-   # Add scripts to package.json
-   node -e '
-     const fs = require("fs");
-     const pkg = JSON.parse(fs.readFileSync("package.json", "utf-8"));
-     pkg.main = "index.js";
-     pkg.scripts = {
+   # Create package.json directly
+   cat > "$out/package.json" << EOF
+   {
+     "name": "agent-garden-project",
+     "version": "1.0.0",
+     "description": "A new agent project",
+     "main": "index.js",
+     "scripts": {
        "start": "node index.js",
        "dev": "nodemon index.js",
        "lint": "eslint .",
        "eslint": "eslint .",
        "format": "prettier --write ."
-     };
-     fs.writeFileSync("package.json", JSON.stringify(pkg, null, 2));
-   '
+     },
+     "keywords": [],
+     "author": "",
+     "license": "ISC",
+     "devDependencies": {
+       "eslint": "^8.57.0",
+       "prettier": "^3.2.5",
+       "eslint-config-prettier": "^9.1.0",
+       "nodemon": "^3.1.0"
+     }
+   }
+   EOF
+
+   # Create a simple index.js file
+   cat > "$out/index.js" << EOF
+   console.log("Welcome to your new agent project! The `dev` script is running.");
+   EOF
+
+   # Create .eslintrc.json
+   cat > "$out/.eslintrc.json" << EOF
+   {
+     "root": true,
+     "extends": [
+       "eslint:recommended",
+       "prettier"
+     ],
+     "rules": {
+       "no-unused-vars": "off"
+     },
+     "parserOptions": {
+       "ecmaVersion": "latest",
+       "sourceType": "module"
+     },
+     "env": {
+       "browser": true,
+       "es6": true,
+       "node": true
+     }
+   }
+   EOF
+
+   # Create .prettierrc.json
+   cat > "$out/.prettierrc.json" << EOF
+   {
+     "semi": true,
+     "singleQuote": true,
+     "trailingComma": "es5"
+   }
+   EOF
+
+   # Install all dependencies from the new package.json
+   npm install
+
    # cd back to the original directory
    cd -
 
    # Remove the template files themselves and any connection to the template's
    # Git repository
    rm -rf "$out/.git" "$out/idx-template".{nix,json}
- '';
+ ''';
 }
