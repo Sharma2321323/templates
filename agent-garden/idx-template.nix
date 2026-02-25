@@ -35,29 +35,10 @@
    echo 'console.log("Welcome to your new agent project! The \\`dev\\` script is running.");' > index.js
 
    # Create .eslintrc.json
-   echo '{
-     "root": true,
-     "extends": [
-       "eslint:recommended",
-       "prettier"
-     ],
-     "parserOptions": {
-       "ecmaVersion": "latest",
-       "sourceType": "module"
-     },
-     "env": {
-       "browser": true,
-       "es6": true,
-       "node": true
-     }
-   }' > .eslintrc.json
+   echo '{\n     "root": true,\n     "extends": [\n       "eslint:recommended",\n       "prettier"\n     ],\n     "rules": {\n       "no-unused-vars": "off"\n     },\n     "parserOptions": {\n       "ecmaVersion": "latest",\n       "sourceType": "module"\n     },\n     "env": {\n       "browser": true,\n       "es6": true,\n       "node": true\n     }\n   }' > .eslintrc.json
 
    # Create .prettierrc.json
-   echo '{
-     "semi": true,
-     "singleQuote": true,
-     "trailingComma": "es5"
-   }' > .prettierrc.json
+   echo '{\n     "semi": true,\n     "singleQuote": true,\n     "trailingComma": "es5"\n   }' > .prettierrc.json
 
    # Add scripts to package.json
    node -e '
